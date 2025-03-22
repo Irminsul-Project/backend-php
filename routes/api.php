@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+Route::post('/auth/login', [AuthController::class, "Login"]);
+Route::get('/auth/whoami', [AuthController::class, "WhoAmI"])->middleware('auth:api');
