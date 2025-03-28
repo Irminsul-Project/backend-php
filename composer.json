@@ -52,7 +52,8 @@
             "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi",
-            "@php artisan passport:client --personal"
+           "@php artisan passport:client --personal",
+           "@php artisan app:create-root-user"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
