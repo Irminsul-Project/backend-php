@@ -26,7 +26,7 @@ class CreateRootUser extends Command
      */
     public function handle()
     {
-        if (Flight::where('name', "root")->count() == 0) {
+        if (User::where('name', "root")->count() == 0) {
             User::create([
                 "name" => "root",
                 "email" => "root@root.root",
