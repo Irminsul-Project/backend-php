@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('knowlage_lavel', function (Blueprint $table) {
-            $table->id();
-            $table->string('code');
-            $table->integer('order');
-            $table->string('description');
+        Schema::create('oauth_personal_access_clients', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('client_id');
+            $table->timestamps();
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('knowlage_lavel');
+        Schema::dropIfExists('oauth_personal_access_clients');
     }
 };

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Passport\RefreshTokenRepository;
-use Laravel\Passport\TokenRepository;
 
 class AuthController extends Controller {
     public function Login(LoginRequest $Request) {
@@ -24,8 +22,8 @@ class AuthController extends Controller {
         }
 
         return response()->json([
-            "Data" => $Data,
-            "Message" => $Message
+            "data" => $Data,
+            "message" => [$Message]
         ], $HttpStatus);
     }
 
@@ -36,8 +34,8 @@ class AuthController extends Controller {
         Auth::user()->tokens()->delete();
 
         return response()->json([
-            "Data" => $Data,
-            "Message" => "Logout Success"
+            "data" => $Data,
+            "message" => ["Logout Success"]
         ], $HttpStatus);
     }
 
@@ -45,8 +43,8 @@ class AuthController extends Controller {
         $User = Auth::user();
 
         return response()->json([
-            "Data" => $User,
-            "Message" => ""
+            "data" => $User,
+            "message" => []
         ], 200);
     }
 }

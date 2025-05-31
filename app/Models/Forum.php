@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Forum extends Model
 {
@@ -11,12 +12,14 @@ class Forum extends Model
     protected $fillable = [
         "title",
         "create_user",
-        "content",
-        "comment",
-        "tags"
+        "content"
     ];
 
-    public function Comments() {
-        return $this->hasMany(ForumCommnet::class, 'forum_id');
+    public function Comments(): MorphMany {
+        return $this->morphMany(Comment::class, 'Commentable');
+    }
+
+    public function Tags() {
+        return $this->hasMany(ForumTag::class, 'forum_id');
     }
 }

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Forum;
-use App\Models\ForumCommnet;
+use App\Models\Tag;
+use App\Models\ForumTag;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -13,6 +15,7 @@ class ForumController extends Controller
 {
     public function Search(Request $Request) {
         $Forums = Forum::get();
+        $TagsId = collect([]);
 
         foreach ($Forums as $Forum) {
             $CreateUserId = $Forum->create_user ?? null;
@@ -20,14 +23,23 @@ class ForumController extends Controller
                 $User = User::find($CreateUserId);
     
                 $Forum->create_user = $User->name;
+                $ForumTags = $Forum->Tags()->select("tag")->get()->pluck("tag");
+                $Forum->tags = $ForumTags;
+
+                $TagsId = $TagsId->union($ForumTags);
             }
         }
 
+        $Tags = Tag::whereIn("id", $TagsId)
+            ->select("id as Id", "code as Code", "description as Description")
+            ->get();
+
         return [
             "Data" => [
-                "Forums" => $Forums
+                "Forums" => $Forums,
+                "Tags" => $Tags
             ],
-            "Message" => ""
+            "message" => []
         ];
     }
 
@@ -40,11 +52,23 @@ class ForumController extends Controller
         $Forum->create_user = $User->id;
         $Forum->save();
 
+        $Tags = $Request->tags ?? [];
+        foreach ($Tags as $Tag) {
+            $TagModel = Tag::find($Tag);
+            if ($TagModel !== null) {
+                $ForumTag = new ForumTag([
+                    "tag" => $Tag
+                ]);
+
+                $Forum->Tags()->save($ForumTag);
+            }
+        }
+
         return [
             "Data" => [
                 "Id" => $Forum->_id
             ],
-            "Message" => "Create Success"
+            "message" => ["Create Success"]
         ];
     }
 
@@ -62,6 +86,7 @@ class ForumController extends Controller
 
         foreach ($Forum->Comments as $Comment) {
             $Comments[] = [
+                "Id" => $Comment->_id,
                 "Content" => $Comment->content,
                 "UserCreateId" => $Comment->create_user
             ];
@@ -86,7 +111,7 @@ class ForumController extends Controller
                 ],
                 "UserCreates" => $UserCreates
             ],
-            "Message" => ""
+            "message" => []
         ];
     }
 
@@ -95,18 +120,18 @@ class ForumController extends Controller
 
         $Forum = Forum::find($Id);
 
-        $ForumCommnet = new ForumCommnet([
+        $Comment = new Comment([
             "content" => $Request->content,
             "create_user" => $User->id
         ]);
 
-        $Forum->Comments()->save($ForumCommnet);
+        $Forum->Comments()->save($Comment);
 
         return [
             "Data" => [
-                "Id" => $ForumCommnet->_id
+                "Id" => $Comment->_id
             ],
-            "Message" => "Add Success"
+            "message" => ["Add Success"]
         ];
     }
 }

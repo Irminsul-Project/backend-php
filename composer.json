@@ -50,10 +50,11 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi",
-           "@php artisan passport:client --personal",
-           "@php artisan app:create-root-user"
+            "@php artisan passport:keys --force",
+            "@php artisan passport:client --personal",
+            "@php artisan app:create-root-user",
+            "@php artisan db:seed"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",

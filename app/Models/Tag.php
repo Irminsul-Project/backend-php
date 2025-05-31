@@ -10,6 +10,10 @@ class Tag extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'code'
+        'code',
+        'description',
+        'action_user',
+        'reason',
+        'status'
     ];
 }

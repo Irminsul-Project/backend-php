@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class KnowlageLavel extends Model
 {
-    protected $table = 'knowlage_lavel';
-    protected $primaryKey = 'id';
+    protected $table = "knowlage_lavel";
+    protected $primaryKey = "id";
+    public $timestamps = false;
 
     protected $fillable = [
-        'code'
+        "code",
+        "order",
+        "description"
     ];
 }
